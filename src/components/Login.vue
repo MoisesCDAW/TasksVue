@@ -30,19 +30,40 @@
 </script>
 
 <template>
-    <div class="w-screen h-[50vh] flex justify-center items-center">
-        <div class="flex flex-col w-[20%] h-[30vh] bg-gray-700 rounded-lg p-4 gap-5 shadow-lg shadow-gray-600">
-            <label class="flex flex-col text-white gap-2">
-                Nombre
-                <input class="h-[40px] rounded-md px-4 text-black" v-model="name" type="text" placeholder="Ingresa tu nombre de usuario">
-            </label>
-            <label class="flex flex-col text-white gap-2">
-                Contraseña
-                <input class="h-[40px] rounded-md px-4 text-black" v-model="password" type="password" placeholder="Ingresa tu contraseña">
-            </label>
+    <div class="w-screen h-screen flex justify-center items-center bg-gray-800 text-white text-sm">
+        <div class="flex flex-col w-[25vw] h-[80vh] p-4 gap-5 border border-gray-600 rounded-md">
+            <div>
+                <h1 class="text-3xl font-[IBM Plex] italic mb-1">Iniciar Sesión</h1>
+                <p class="text-gray-500">Ingresa tu nombre y contraseña para ingresar</p>
+            </div>
 
-            <button @click="login(name, password, route)" class="bg-white w-[100px] p-2 rounded-md m-auto hover:bg-gray-300">ENVIAR</button>
+            <div class="w-full flex flex-col gap-4">
+                <label class="flex flex-col gap-2">
+                    Nombre
+                    <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
+                    v-model="name" type="text" placeholder="Ingresa tu nombre de usuario">
+                </label>
+                <label class="flex flex-col gap-2">
+                    Contraseña
+                    <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
+                    v-model="password" type="password" placeholder="Ingresa tu contraseña">
+                </label>
+            </div>
+
+            <div class="w-full flex justify-center">
+                <button 
+                    @click="login(name, password, route)" 
+                    class="w-[100px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
+                    >ENVIAR
+                </button>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-xs text-center">MoisesCAP, 2025</p>
+            </div>
         </div>
+
+
     </div>
 </template>
 
