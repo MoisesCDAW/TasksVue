@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-minimalista::-webkit-scrollbar {
+    width: 6px; /* Ancho de la barra */
+    height: 6px; /* Altura en desplazamiento horizontal */
+}
+
+.scrollbar-minimalista::-webkit-scrollbar-thumb {
+    background: #000; /* Color del pulgar */
+    border-radius: 3px; /* Bordes redondeados */
+}
+
+.scrollbar-minimalista::-webkit-scrollbar-track {
+    background: #fff; /* Color de la pista */
+}
