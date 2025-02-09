@@ -11,10 +11,10 @@
     const {userSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
-    const notesAPI = "http://127.0.0.1:8000/api/notes"
+    const notesAPI = "https://notesapi.moisescap.com/api/notes"
 
     /**
-     * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
+     * * Allows fetching all notes from the API via axios and assigns the retrieved data to the reactive variable "notes".
      */
     async function getNotes(){
         try {
@@ -33,9 +33,9 @@
      * @param newNote 
      */
     async function createNote(newTitle, newNote) {
-        if (newTitle || newNote){
+        if (newTitle && newNote){
 
-            await axios.post("http://127.0.0.1:8000/api/notes", {
+            await axios.post(notesAPI, {
                 title: newTitle,
                 note: newNote
             })
@@ -64,12 +64,12 @@
                 <div class="flex flex-col gap-4">
                     <label class="flex flex-col gap-2">
                         Título
-                        <input class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
+                        <input required class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
                     </label>
 
                     <label class="flex flex-col gap-2">
                         Nota
-                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                        <textarea required class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
                     </label>
                 </div>
                 

@@ -11,7 +11,7 @@
     const {userSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
-    const notesAPI = "http://127.0.0.1:8000/api/notes"
+    const notesAPI = "https://notesapi.moisescap.com/api/notes"
     
     // PROP received from the parent component "Tasks".
     const data = defineProps(['id'])
@@ -51,9 +51,10 @@
      * @param newNote 
      */
     async function updateNote(newTitle, newNote) {
-        if (newTitle || newNote){
-
-            await axios.patch("http://127.0.0.1:8000/api/notes/"+data.id, {
+        console.log(newTitle.length);
+        
+        if (newTitle.length>0 && newNote.length>0){
+            await axios.patch(notesAPI+"/"+data.id, {
                 title: newTitle,
                 note: newNote
             })
@@ -86,13 +87,13 @@
                 <div class="flex flex-col gap-4">
                     <label class="flex flex-col gap-2">
                         Título
-                        <input 
+                        <input required
                             class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
                     </label>
 
                     <label class="flex flex-col gap-2">
                         Nota
-                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-hidden" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                        <textarea required class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-hidden" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
                     </label>
                 </div>
                 

@@ -9,7 +9,7 @@
     const {notes} = storeToRefs(store)
     const fullNoteModal = ref(false)
     const note = ref(null)
-    const notesAPI = "http://127.0.0.1:8000/api/notes"
+    const notesAPI = "https://notesapi.moisescap.com/api/notes"
     let lastNoteID = 0 // To keep track of which was the last marked note card.
 
     /**
@@ -123,7 +123,7 @@
                         :id="`note-${note.id}`"
                         class="min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
                             <p class="text-gray-500 text-sm">Nota</p>
-                            <p class="text-sm text-gray-200">{{note.title}}</p>
+                            <p class="text-sm text-gray-200 text-right">{{note.title}}</p>
                             <p class="text-gray-500 text-sm">{{formatDate(note.created_at)}}</p>
                         </a>
                     </template>

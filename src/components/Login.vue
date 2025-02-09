@@ -2,14 +2,28 @@
     import { storeToRefs } from 'pinia' 
     import { useStore } from '../stores/store'
     import { useRouter } from 'vue-router'
+    import { ref } from 'vue'
 
     const store = useStore()
-    const {login} = store
     const {notes} = storeToRefs(store)
-    const name = null
-    const password = null
+    const {userSession} = storeToRefs(store)
+    const name = ref(null)
+    const password = ref(null)
     const route = useRouter() // Objecto que permite gestionar redirecciones
-    const notesAPI = "http://127.0.0.1:8000/api/notes"
+    const notesAPI = "https://notesapi.moisescap.com/api/notes"
+
+    /**
+     * Permite gestionar el inicio de sesión de cada usuario
+     */
+    function login(user, password) {
+        if (user && password) {
+            userSession.value = user
+            route.push("tasks") // Redirección, no confundir con push() de arrays
+        }else {
+            alert("ERROR: No pueden haber datos vacíos")
+        }
+    }
+
 
     /**
      * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
@@ -50,7 +64,7 @@
 
             <div class="w-full flex justify-center">
                 <button 
-                    @click="login(name, password, route)" 
+                    @click="login(name, password)"
                     class="w-[100px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
                     >ENVIAR
                 </button>
