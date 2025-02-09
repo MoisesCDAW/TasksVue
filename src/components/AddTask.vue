@@ -6,9 +6,43 @@
 
     const title = null
     const store = useStore()
-    const {addtask} = store
     const {userSession} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
+    const notesAPI = "http://127.0.0.1:8000/api/notes"
+
+    /**
+     * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
+     */
+    async function getNotes(){
+        try {
+            const data = await axios.get(notesAPI) 
+            notes.value = data
+        }catch(error){
+            console.log(`ERROR. No se pudo obtener la información: ${error}`)
+        }   
+    }
+
+    
+    /**
+     * Creates a note with the data collected from the inputs, updates the "Notes" store, and redirects to the main section.
+     * @param newTitle 
+     * @param newNote 
+     */
+    function createNote(newTitle, newNote) {
+        if (newTitle || newNote){
+
+            axios.post("http://127.0.0.1:8000/api/notes", {
+                title: newTitle,
+                note: newNote
+            })
+
+            getNotes()
+            route.push("tasks") // Redirección
+        }else {
+            alert("ERROR: No pueden haber datos vacíos")
+        }
+    }
+
 </script>
 
 <template>
@@ -31,11 +65,11 @@
 
                     <label class="flex flex-col gap-2">
                         Nota
-                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
                     </label>
                 </div>
                 
-                <button @click="addtask(title, route)" class="w-[100px] text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">AGREGAR</button>
+                <button @click="createNote(title, note)" class="w-[100px] text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">AGREGAR</button>
             </div>
         </div>
     </div>

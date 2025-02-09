@@ -8,25 +8,6 @@
     const name = null
     const password = null
     const route = useRouter() // Objecto que permite gestionar redirecciones
-    const {notes} = storeToRefs(store)
-    const notesAPI = "http://127.0.0.1:8000/api/notes"
-
-    /**
-     * Permite obtener todas las tareas de la API a través de axios y asigna los datos obtenidos 
-     * a la variable reactiva "tasks"
-     */
-    async function getTasks(API){
-        try {
-            const data = await axios.get(API) 
-            notes.value = data
-        }catch(error){
-            console.log(`ERROR. No se pudo obtener la información: ${error}`)
-        }   
-    }
-
-
-    // ==== INIT ====
-    getTasks(notesAPI)
 </script>
 
 <template>

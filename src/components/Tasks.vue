@@ -10,6 +10,21 @@
     const {notes} = storeToRefs(store)
     const fullNoteModal = ref(false)
     const note = ref(null)
+    const notesAPI = "http://127.0.0.1:8000/api/notes"
+    let lastNoteID = 0
+
+    /**
+     * Permite obtener todas las tareas de la API a través de axios y asigna los datos obtenidos 
+     * a la variable reactiva "tasks"
+     */
+    async function getNotes(){
+        try {
+            const data = await axios.get(notesAPI) 
+            notes.value = data
+        }catch(error){
+            console.log(`ERROR. No se pudo obtener la información: ${error}`)
+        }   
+    }
 
 
     /**
@@ -21,8 +36,22 @@
     }
 
 
+    /**
+     * Shows the details of the note passed as a parameter.
+     * @param noteID
+     */
     function printNote(noteID){
+
+        console.log(lastNoteID);
+        // console.log(document.querySelector(`#note-${noteID}`).classList.);
         
+        
+        document.querySelector(`#note-${noteID}`).classList.toggle("border-gray-800");
+        if (lastNoteID!=0) {
+            document.querySelector(`#note-${lastNoteID}`).classList.toggle("border-gray-800");
+        }
+        lastNoteID = noteID
+
         notes.value.data[0].forEach((aux)=>{
             if (aux.id === noteID) {   
                 fullNoteModal.value = true
@@ -30,6 +59,9 @@
             }
         })
     }
+
+    // ==== INIT ====
+    getNotes()
 
 </script>
 
@@ -74,9 +106,9 @@
                         <a 
                         href="#top"
                         v-for="note in notes.data[0]"
-                        @click="printNote(note.id)"
-                        :id="note.id"
-                        class="min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-600 hover:border hover:border-white rounded-md p-2 pe-4">
+                        @click="printNote(note.id, this)"
+                        :id="`note-${note.id}`"
+                        class="min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
                             <p class="text-gray-500 text-sm">Nota</p>
                             <p class="text-sm text-gray-200">{{note.title}}</p>
                             <p class="text-gray-500 text-sm">{{formatDate(note.created_at)}}</p>
@@ -96,7 +128,7 @@
                         <div class="flex gap-2 justify-between">
                             <div class="flex flex-col">
                                 <span class="text-sm text-gray-500">Haz click sobre el título para volver a la tarjeta de la nota</span>
-                                <a :href="`#${note.id}`" class="text-2xl font-semibold mb-6">{{note.title}}</a>
+                                <a :href="`#note-${note.id}`" class="text-2xl font-semibold mb-6">{{note.title}}</a>
                             </div>
 
                             <div class="flex gap-2">
