@@ -7,6 +7,7 @@
     const title = null
     const store = useStore()
     const {userSession} = storeToRefs(store)
+    const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
     const notesAPI = "http://127.0.0.1:8000/api/notes"
 
@@ -22,16 +23,17 @@
         }   
     }
 
-    
+
     /**
-     * Creates a note with the data collected from the inputs, updates the "Notes" store, and redirects to the main section.
+     * Makes the request to create a note with the data collected from the inputs, 
+     * updates the "Notes" store, and redirects to the main section.
      * @param newTitle 
      * @param newNote 
      */
-    function createNote(newTitle, newNote) {
+    async function createNote(newTitle, newNote) {
         if (newTitle || newNote){
 
-            axios.post("http://127.0.0.1:8000/api/notes", {
+            await axios.post("http://127.0.0.1:8000/api/notes", {
                 title: newTitle,
                 note: newNote
             })

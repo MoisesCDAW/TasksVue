@@ -11,7 +11,7 @@
     const fullNoteModal = ref(false)
     const note = ref(null)
     const notesAPI = "http://127.0.0.1:8000/api/notes"
-    let lastNoteID = 0
+    let lastNoteID = 0 // To keep track of which was the last marked note card.
 
     /**
      * Permite obtener todas las tareas de la API a través de axios y asigna los datos obtenidos 
@@ -42,16 +42,14 @@
      */
     function printNote(noteID){
 
-        console.log(lastNoteID);
-        // console.log(document.querySelector(`#note-${noteID}`).classList.);
-        
-        
+        // Allows marking the current note's card and unmarking the previous one.
         document.querySelector(`#note-${noteID}`).classList.toggle("border-gray-800");
         if (lastNoteID!=0) {
             document.querySelector(`#note-${lastNoteID}`).classList.toggle("border-gray-800");
         }
         lastNoteID = noteID
 
+        // Searches for which note should display the detailed view.
         notes.value.data[0].forEach((aux)=>{
             if (aux.id === noteID) {   
                 fullNoteModal.value = true
@@ -60,8 +58,24 @@
         })
     }
 
-    // ==== INIT ====
-    getNotes()
+
+    /**
+     * Makes the request to delete a note with the ID passed as a parameter.
+     * @param noteID 
+     */
+    async function deleteNote(noteID) {
+
+        // Unmarks the card of the task that is going to be deleted.
+        document.querySelector(`#note-${noteID}`).classList.toggle("border-gray-800");
+        lastNoteID = 0
+
+        //Hides the task details view.
+        fullNoteModal.value = false
+        
+        await axios.delete(notesAPI+`/${noteID}`)
+
+        getNotes()
+    }
 
 </script>
 
@@ -132,12 +146,17 @@
                             </div>
 
                             <div class="flex gap-2">
+                                <!-- Edit button -->
                                 <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="15px" height="15px" fill="#ddd">
-                                    <path d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z"/>
-                                </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="15px" height="15px" fill="#ddd">
+                                        <path d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z"/>
+                                    </svg>
                                 </a>
-                                <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+
+                                <!-- Delete button -->
+                                <a 
+                                @click="deleteNote(note.id)"
+                                class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="18px" height="19px" fill="#ddd">
                                         <path d="m15.854,10.854l-3.146,3.146,3.146,3.146c.195.195.195.512,0,.707-.098.098-.226.146-.354.146s-.256-.049-.354-.146l-3.146-3.146-3.146,3.146c-.098.098-.226.146-.354.146s-.256-.049-.354-.146c-.195-.195-.195-.512,0-.707l3.146-3.146-3.146-3.146c-.195-.195-.195-.512,0-.707s.512-.195.707,0l3.146,3.146,3.146-3.146c.195-.195.512-.195.707,0s.195.512,0,.707Zm7.146-6.354c0,.276-.224.5-.5.5h-1.5c0,.015,0,.03-.002.046l-1.37,14.867c-.215,2.33-2.142,4.087-4.481,4.087h-6.272c-2.337,0-4.263-1.754-4.48-4.08l-1.392-14.873c-.001-.016-.002-.031-.002-.047h-1.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5.028c.25-2.247,2.16-4,4.472-4h2c2.312,0,4.223,1.753,4.472,4h5.028c.276,0,.5.224.5.5Zm-15.464-.5h8.928c-.243-1.694-1.704-3-3.464-3h-2c-1.76,0-3.221,1.306-3.464,3Zm12.462,1H4.002l1.387,14.826c.168,1.81,1.667,3.174,3.484,3.174h6.272c1.82,0,3.318-1.366,3.485-3.179l1.366-14.821Z"/>
                                     </svg>

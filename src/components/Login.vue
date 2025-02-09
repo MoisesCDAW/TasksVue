@@ -5,9 +5,26 @@
 
     const store = useStore()
     const {login} = store
+    const {notes} = storeToRefs(store)
     const name = null
     const password = null
     const route = useRouter() // Objecto que permite gestionar redirecciones
+    const notesAPI = "http://127.0.0.1:8000/api/notes"
+
+    /**
+     * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
+     */
+    async function getNotes(){
+        try {
+            const data = await axios.get(notesAPI) 
+            notes.value = data
+        }catch(error){
+            console.log(`ERROR. No se pudo obtener la información: ${error}`)
+        }   
+    }
+
+    // ==== INIT ====
+    getNotes()
 </script>
 
 <template>
