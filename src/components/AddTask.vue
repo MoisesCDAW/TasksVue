@@ -12,24 +12,31 @@
 </script>
 
 <template>
+    
 
-    <div class="w-screen h-screen flex bg-gray-800 text-white text-sm">
+    <div class="w-screen h-screen flex flex-col bg-gray-800 text-white text-sm">
         <!-- Close sesion button and user name -->
         <header class="flex items-center justify-between p-2 px-16 text-gray-200">
-            <p class="p-2 text-center m-2">~ {{userSession}}</p>    
+            <p class="p-2 text-center m-2 text-base">~ {{userSession}}</p>    
+            <RouterLink to="/tasks" class="text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">VOLVER</RouterLink>
         </header>
 
-        <div class="flex flex-col gap-4 p-2">
-            <div class="flex flex-col w-[20%] h-[20vh] bg-gray-700 rounded-lg p-4 gap-5 shadow-lg shadow-gray-600">
-                <label class="flex flex-col text-white gap-2">
-                    Título de la tarea
-                    <input class="h-[40px] rounded-md px-4 text-black" v-model="title" type="text" placeholder="Ingresa tu nombre de usuario">
-                </label>
+        <div class="w-screen flex justify-center">
+            <div class="flex flex-col w-[60vw] h-[80vh] p-4 gap-5 border border-gray-600 rounded-md">
+                <div class="flex flex-col gap-4">
+                    <label class="flex flex-col gap-2">
+                        Título
+                        <input class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
+                    </label>
 
-                <button @click="addtask(title, route)" class="bg-white w-[100px] p-2 rounded-md m-auto hover:bg-gray-300">AGREGAR</button>
+                    <label class="flex flex-col gap-2">
+                        Nota
+                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                    </label>
+                </div>
+                
+                <button @click="addtask(title, route)" class="w-[100px] text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">AGREGAR</button>
             </div>
-            
-            <RouterLink to="/tasks" class="w-[100px] text-center m-2 me-24 bg-green-500 text-white p-2 px-4 rounded-md cursor-pointer hover:bg-green-700">VOLVER</RouterLink>
         </div>
     </div>
 </template>
