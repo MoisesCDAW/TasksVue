@@ -12,9 +12,12 @@
     const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
     const notesAPI = "http://127.0.0.1:8000/api/notes"
+    
+    // PROP received from the parent component "Tasks".
+    const data = defineProps(['id'])
 
     /**
-     * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
+     * * Allows fetching all notes from the API via axios and assigns the retrieved data to the reactive variable "notes".
      */
     async function getNotes(){
         try {
@@ -27,25 +30,44 @@
 
 
     /**
+     * * Allows fetching one note from the API via axios
+     */
+    async function getNote(){   
+        try {
+            const aux = await axios.get(notesAPI+`/${data.id}`) 
+            title.value = aux.data[0].title
+            note.value = aux.data[0].note
+            
+        }catch(error){
+            console.log(`ERROR. No se pudo obtener la información: ${error}`)
+        }   
+    }
+
+
+    /**
      * Makes the request to create a note with the data collected from the inputs, 
      * updates the "Notes" store, and redirects to the main section.
      * @param newTitle 
      * @param newNote 
      */
-    async function createNote(newTitle, newNote) {
+    async function updateNote(newTitle, newNote) {
         if (newTitle || newNote){
 
-            await axios.post("http://127.0.0.1:8000/api/notes", {
+            await axios.patch("http://127.0.0.1:8000/api/notes/"+data.id, {
                 title: newTitle,
                 note: newNote
             })
 
             getNotes()
-            route.push("tasks") // Redirección
+            route.push("../tasks") // Redirección
         }else {
             alert("ERROR: No pueden haber datos vacíos")
         }
     }
+
+
+    // ==== INIT ====
+    getNote()
 
 </script>
 
@@ -64,7 +86,8 @@
                 <div class="flex flex-col gap-4">
                     <label class="flex flex-col gap-2">
                         Título
-                        <input class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
+                        <input 
+                            class="bg-gray-800 h-[40px] w-[55%] rounded-md px-4 border border-gray-600 placeholder:text-gray-500"  v-model="title" type="text" placeholder="Ingresa el título de la nota">
                     </label>
 
                     <label class="flex flex-col gap-2">
@@ -73,11 +96,12 @@
                     </label>
                 </div>
                 
-                <button @click="createNote(title, note)" class="w-[100px] text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">AGREGAR</button>
+                <button @click="updateNote(title, note)" class="w-[100px] text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">EDITAR</button>
             </div>
         </div>
     </div>
 </template>
+
 
 <style scoped>
 
