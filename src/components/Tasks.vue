@@ -165,7 +165,7 @@
                         </div>
 
                         <!-- Note body -->
-                        <textarea disabled class="w-full min-h-[90vh] bg-gray-800 scrollbar-minimalista">{{note.note}}</textarea>
+                        <textarea disabled class="w-full min-h-[100vh] bg-gray-800 scrollbar-hidden">{{note.note}}</textarea>
                     </div>
                 </template>
             </div>

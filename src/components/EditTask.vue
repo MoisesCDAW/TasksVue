@@ -92,7 +92,7 @@
 
                     <label class="flex flex-col gap-2">
                         Nota
-                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                        <textarea class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-hidden" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
                     </label>
                 </div>
                 

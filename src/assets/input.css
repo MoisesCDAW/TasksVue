@@ -11,16 +11,7 @@
     }
 }
 
-.scrollbar-minimalista::-webkit-scrollbar {
+.scrollbar-hidden::-webkit-scrollbar {
     width: 0; /* Ancho de la barra */
     height: 0; /* Altura en desplazamiento horizontal */
-}
-
-.scrollbar-minimalista::-webkit-scrollbar-thumb {
-    background: #555; /* Color del pulgar */
-    border-radius: 3px; /* Bordes redondeados */
-}
-
-.scrollbar-minimalista::-webkit-scrollbar-track {
-    background: #ddd; /* Color de la pista */
 }
