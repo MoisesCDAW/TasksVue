@@ -8,8 +8,8 @@
     const name = null
     const password = null
     const route = useRouter() // Objecto que permite gestionar redirecciones
-    const {tasks} = storeToRefs(store)
-    const tasksAPI = "https://jsonplaceholder.typicode.com/todos"
+    const {notes} = storeToRefs(store)
+    const notesAPI = "http://127.0.0.1:8000/api/notes"
 
     /**
      * Permite obtener todas las tareas de la API a través de axios y asigna los datos obtenidos 
@@ -17,8 +17,8 @@
      */
     async function getTasks(API){
         try {
-            const data = await axios.get(API)
-            tasks.value = data
+            const data = await axios.get(API) 
+            notes.value = data
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   
@@ -26,7 +26,7 @@
 
 
     // ==== INIT ====
-    getTasks(tasksAPI)
+    getTasks(notesAPI)
 </script>
 
 <template>

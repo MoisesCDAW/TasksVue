@@ -3,10 +3,34 @@
     import { storeToRefs } from 'pinia' 
     import TaskItem from './TaskItem.vue'
     import { RouterLink } from 'vue-router'
+    import { ref } from 'vue'
 
     const store = useStore()
     const {userSession} = storeToRefs(store)
-    const {tasks} = storeToRefs(store)
+    const {notes} = storeToRefs(store)
+    const fullNoteModal = ref(false)
+    const note = ref(null)
+
+
+    /**
+     * Formats the creation note date to display in the DD/MM/YYYY HH:MM:SS format.
+     * @param date 
+     */
+    function formatDate(noteDate) {
+        return new Date(noteDate).toLocaleString()
+    }
+
+
+    function printNote(noteID){
+        
+        notes.value.data[0].forEach((aux)=>{
+            if (aux.id === noteID) {   
+                fullNoteModal.value = true
+                return note.value = aux
+            }
+        })
+    }
+
 </script>
 
 <template>
@@ -46,107 +70,55 @@
 
                 <!-- Notes of the navegation bar -->
                 <div class="flex flex-col gap-4">
-                    <a class="flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
-                        <p class="text-sm text-gray-200">Título de la nota</p>
-                        <p class="text-gray-500 text-sm">Febrero, 08</p>
-                        <p class="text-gray-500 italic text-sm">2025</p>
-                    </a>
-
-                    <a class="flex flex-col items-end cursor-pointer transition duration-300 hover:border hover:border-white border border-gray-600 rounded-md p-2 pe-4">
-                        <p class="text-sm cursor-pointer text-gray-200 text-right">Otro título de alguna otra nota</p>
-                        <p class="text-gray-500 text-sm">Febrero, 07</p>
-                        <p class="text-gray-500 italic text-sm">2025</p>
-                    </a>
-                    
-                    <a class="flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
-                        <p class="text-sm cursor-pointer text-gray-200">Nota</p>
-                        <p class="text-gray-500 text-sm">Enero, 08</p>
-                        <p class="text-gray-500 italic text-sm">2025</p>
-                    </a>
+                    <template v-if="notes"> <!-- if notes is not empty -->
+                        <a 
+                        href="#top"
+                        v-for="note in notes.data[0]"
+                        @click="printNote(note.id)"
+                        :id="note.id"
+                        class="min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-600 hover:border hover:border-white rounded-md p-2 pe-4">
+                            <p class="text-gray-500 text-sm">Nota</p>
+                            <p class="text-sm text-gray-200">{{note.title}}</p>
+                            <p class="text-gray-500 text-sm">{{formatDate(note.created_at)}}</p>
+                        </a>
+                    </template>
                 </div>
             </div>
 
             <!-- Notes -->
             <div class="w-[45vw]">
 
-                <!-- First Note -->
-                <div class="text-gray-200 p-6 border border-gray-600 rounded-md">
+                <template v-if="fullNoteModal">
+                    <!-- First Note -->
+                    <div class="text-gray-200 p-6 border border-gray-600 rounded-md">
 
-                    <!-- Title and action buttons -->
-                    <div class="flex gap-2 justify-between">
-                        <h1 class="text-2xl font-semibold mb-6">Título de la nota</h1>
+                        <!-- Title and action buttons -->
+                        <div class="flex gap-2 justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-sm text-gray-500">Haz click sobre el título para volver a la tarjeta de la nota</span>
+                                <a :href="`#${note.id}`" class="text-2xl font-semibold mb-6">{{note.title}}</a>
+                            </div>
 
-                        <div class="flex gap-2">
-                            <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="15px" height="15px" fill="#ddd">
-                                <path d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z"/>
-                            </svg>
-                            </a>
-                            <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="18px" height="19px" fill="#ddd">
-                                    <path d="m15.854,10.854l-3.146,3.146,3.146,3.146c.195.195.195.512,0,.707-.098.098-.226.146-.354.146s-.256-.049-.354-.146l-3.146-3.146-3.146,3.146c-.098.098-.226.146-.354.146s-.256-.049-.354-.146c-.195-.195-.195-.512,0-.707l3.146-3.146-3.146-3.146c-.195-.195-.195-.512,0-.707s.512-.195.707,0l3.146,3.146,3.146-3.146c.195-.195.512-.195.707,0s.195.512,0,.707Zm7.146-6.354c0,.276-.224.5-.5.5h-1.5c0,.015,0,.03-.002.046l-1.37,14.867c-.215,2.33-2.142,4.087-4.481,4.087h-6.272c-2.337,0-4.263-1.754-4.48-4.08l-1.392-14.873c-.001-.016-.002-.031-.002-.047h-1.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5.028c.25-2.247,2.16-4,4.472-4h2c2.312,0,4.223,1.753,4.472,4h5.028c.276,0,.5.224.5.5Zm-15.464-.5h8.928c-.243-1.694-1.704-3-3.464-3h-2c-1.76,0-3.221,1.306-3.464,3Zm12.462,1H4.002l1.387,14.826c.168,1.81,1.667,3.174,3.484,3.174h6.272c1.82,0,3.318-1.366,3.485-3.179l1.366-14.821Z"/>
+                            <div class="flex gap-2">
+                                <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="15px" height="15px" fill="#ddd">
+                                    <path d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z"/>
                                 </svg>
-                            </a>
+                                </a>
+                                <a class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="18px" height="19px" fill="#ddd">
+                                        <path d="m15.854,10.854l-3.146,3.146,3.146,3.146c.195.195.195.512,0,.707-.098.098-.226.146-.354.146s-.256-.049-.354-.146l-3.146-3.146-3.146,3.146c-.098.098-.226.146-.354.146s-.256-.049-.354-.146c-.195-.195-.195-.512,0-.707l3.146-3.146-3.146-3.146c-.195-.195-.195-.512,0-.707s.512-.195.707,0l3.146,3.146,3.146-3.146c.195-.195.512-.195.707,0s.195.512,0,.707Zm7.146-6.354c0,.276-.224.5-.5.5h-1.5c0,.015,0,.03-.002.046l-1.37,14.867c-.215,2.33-2.142,4.087-4.481,4.087h-6.272c-2.337,0-4.263-1.754-4.48-4.08l-1.392-14.873c-.001-.016-.002-.031-.002-.047h-1.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5.028c.25-2.247,2.16-4,4.472-4h2c2.312,0,4.223,1.753,4.472,4h5.028c.276,0,.5.224.5.5Zm-15.464-.5h8.928c-.243-1.694-1.704-3-3.464-3h-2c-1.76,0-3.221,1.306-3.464,3Zm12.462,1H4.002l1.387,14.826c.168,1.81,1.667,3.174,3.484,3.174h6.272c1.82,0,3.318-1.366,3.485-3.179l1.366-14.821Z"/>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Note body -->
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                        <br><br>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem illum delectus voluptas tenetur 
-                        nostrum aspernatur asperiores provident explicabo deleniti atque quisquam 
-                        molestiae ducimus, quod distinctio a nesciunt veniam suscipit non.
-                    </p>
-                </div>
+                        <!-- Note body -->
+                        <p>{{note.note}}</p>
+                    </div>
+                </template>
             </div>
         </section>
-
-
-    <!--
-        <div class="flex justify-center text-white">
-            <table class="m-2 border-2 border-gray-700">
-                <tr>
-                    <th class="w-[10%] bg-gray-700 text-white text-center px-6 font-semibold py-2 border">ID</th>
-                    <th class="bg-gray-700 text-white text-center px-6 font-semibold border">Título</th>
-                    <th class="bg-gray-700 text-white text-center px-6 font-semibold border">Completada</th>
-                </tr>
-
-                Por cada registro de la variable del Pinia Store "tasks", se llamará a un componente hijo pasando como props los datos de la tarea
-                <template v-if="tasks">
-                    <tr v-for="task in tasks.data">
-                        <TaskItem :id="task.id" :title="task.title" :completed="task.completed"/>
-                    </tr>
-                </template>
-            </table>
-        </div>
-    -->
     </div>  
 </template>
 
