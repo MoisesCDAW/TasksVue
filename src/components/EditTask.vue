@@ -9,6 +9,7 @@
     const note = ref(null)
     const store = useStore()
     const {userSession} = storeToRefs(store)
+    const {tokenSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
     const notesAPI = "https://notesapi.moisescap.com/api/notes"
@@ -21,7 +22,11 @@
      */
     async function getNotes(){
         try {
-            const data = await axios.get(notesAPI) 
+            const data = await axios.get(notesAPI,{
+                headers: {
+                    'Authorization': `Bearer ${tokenSession.value.data.token}`
+                }
+            }) 
             notes.value = data
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
@@ -34,7 +39,12 @@
      */
     async function getNote(){   
         try {
-            const aux = await axios.get(notesAPI+`/${data.id}`) 
+            const aux = await axios.get(notesAPI+`/${data.id}`,{
+                headers: {
+                    'Authorization': `Bearer ${tokenSession.value.data.token}`
+                }
+            }) 
+
             title.value = aux.data[0].title
             note.value = aux.data[0].note
             
@@ -51,13 +61,19 @@
      * @param newNote 
      */
     async function updateNote(newTitle, newNote) {
-        console.log(newTitle.length);
         
         if (newTitle.length>0 && newNote.length>0){
-            await axios.patch(notesAPI+"/"+data.id, {
-                title: newTitle,
-                note: newNote
-            })
+            await axios.patch(notesAPI+"/"+data.id, 
+                {
+                    title: newTitle,
+                    note: newNote
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${tokenSession.value.data.token}`
+                    }
+                }
+            )
 
             getNotes()
             route.push("../tasks") // Redirección

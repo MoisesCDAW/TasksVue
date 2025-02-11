@@ -9,6 +9,7 @@
     const note = ref(null)
     const store = useStore()
     const {userSession} = storeToRefs(store)
+    const {tokenSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
     const route = useRouter() // Objecto que permite gestionar redirecciones
     const notesAPI = "https://notesapi.moisescap.com/api/notes"
@@ -18,7 +19,11 @@
      */
     async function getNotes(){
         try {
-            const data = await axios.get(notesAPI) 
+            const data = await axios.get(notesAPI, {
+                headers: {
+                    'Authorization': `Bearer ${tokenSession.value.data.token}` 
+                }
+            }) 
             notes.value = data
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
@@ -35,10 +40,17 @@
     async function createNote(newTitle, newNote) {
         if (newTitle && newNote){
 
-            await axios.post(notesAPI, {
-                title: newTitle,
-                note: newNote
-            })
+            await axios.post(notesAPI,                
+                {
+                    title: newTitle,
+                    note: newNote
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${tokenSession.value.data.token}`
+                    }
+                }
+            )
 
             getNotes()
             route.push("tasks") // Redirección

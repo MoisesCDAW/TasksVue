@@ -6,6 +6,7 @@
 
     const store = useStore()
     const {userSession} = storeToRefs(store)
+    const {tokenSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
     const fullNoteModal = ref(false)
     const note = ref(null)
@@ -38,7 +39,11 @@
      */
     async function getNotes(){
         try {
-            const data = await axios.get(notesAPI) 
+            const data = await axios.get(notesAPI, {
+                headers: {
+                    'Authorization': `Bearer ${tokenSession.value.data.token}`
+                }
+            }) 
             notes.value = data
             
         }catch(error){
@@ -92,7 +97,11 @@
         //Hides the task details view.
         fullNoteModal.value = false
         
-        await axios.delete(notesAPI+`/${noteID}`)
+        await axios.delete(notesAPI+`/${noteID}`,{
+            headers: {
+                'Authorization': `Bearer ${tokenSession.value.data.token}`
+            }
+        })
 
         getNotes()
     }

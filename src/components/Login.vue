@@ -7,7 +7,8 @@
     const store = useStore()
     const {notes} = storeToRefs(store)
     const {userSession} = storeToRefs(store)
-    const name = ref(null)
+    const {tokenSession} = storeToRefs(store)
+    const email = ref(null)
     const password = ref(null)
     const route = useRouter() // Objecto que permite gestionar redirecciones
     const notesAPI = "https://notesapi.moisescap.com/api/notes"
@@ -15,9 +16,16 @@
     /**
      * Permite gestionar el inicio de sesión de cada usuario
      */
-    function login(user, password) {
-        if (user && password) {
-            userSession.value = user
+    async function login(email, password) {
+        if (email && password) {
+
+            userSession.value = email
+            tokenSession.value = await axios.post("https://notesapi.moisescap.com/api/login", {
+                email: email,
+                password: password
+            })
+            
+            getNotes()
             route.push("tasks") // Redirección, no confundir con push() de arrays
         }else {
             alert("ERROR: No pueden haber datos vacíos")
@@ -30,23 +38,18 @@
      */
     async function getNotes(){
         try {
-            const data = await axios.get(notesAPI) 
+            const data = await axios.get(notesAPI, {
+                headers: {
+                    'Authorization': `Bearer ${tokenSession.value.data.token}`
+                }
+            })
+            
             notes.value = data
-            // console.log(notes.value.data[0].sort((a, b)=>a.id - b.id)); // De menor a mayor
-            // console.log(notes.value.data[0].sort((a, b)=>b.id - a.id)); // De mayor a menor
-
-            // console.log(notes.value.data[0].sort((a, b)=>{
-            //     let aux=a.id - b.id 
-            //     return aux
-            // }));
             
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   
     }
-
-    // ==== INIT ====
-    getNotes()
 </script>
 
 <template>
@@ -59,9 +62,9 @@
 
             <div class="w-full flex flex-col gap-4">
                 <label class="flex flex-col gap-2">
-                    Nombre
+                    Email
                     <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
-                    v-model="name" type="text" placeholder="Ingresa tu nombre de usuario">
+                    v-model="email" type="text" placeholder="Ingresa tu email">
                 </label>
                 <label class="flex flex-col gap-2">
                     Contraseña
@@ -72,7 +75,7 @@
 
             <div class="w-full flex justify-center">
                 <button 
-                    @click="login(name, password)"
+                    @click="login(email, password)"
                     class="w-[100px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
                     >ENVIAR
                 </button>
