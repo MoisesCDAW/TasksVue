@@ -93,18 +93,50 @@
             <h1 class="font-[IBM Plex] italic text-white text-6xl w-[45vw]">REGISTRA TU DÍA Y NO PIERDAS NINGÚN DETALLE.</h1>
         </div>
 
-        <!-- Add Note Button -->
-        <div class="flex justify-end my-8 w-[82vw]" id="top">
-            <RouterLink to="/addtasks" 
-                class="flex gap-2 text-white text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
-                >
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve" fill="#ddd" width="12px">
-                    <g>
-                        <path d="M480,224H288V32c0-17.673-14.327-32-32-32s-32,14.327-32,32v192H32c-17.673,0-32,14.327-32,32s14.327,32,32,32h192v192   c0,17.673,14.327,32,32,32s32-14.327,32-32V288h192c17.673,0,32-14.327,32-32S497.673,224,480,224z"/>
-                    </g>
-                </svg>
-                Agregar Nota
-            </RouterLink>
+
+        <!-- Header Action buttons -->
+        <div class="flex justify-center w-screen mt-6">
+            
+            <div class="w-[60vw] flex justify-between ps-48">
+                <div class="flex gap-2 items-center">
+
+                    <!-- Order latest -->
+                    <div>
+                        <button class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" style="rotate: 180deg;" fill="#fff"><g id="_01_align_center" data-name="01 align center"><path d="M16.659,17.788,13.026,21.42,13,0,11,0l.026,21.407-3.62-3.62L5.992,19.2l3.919,3.919a3,3,0,0,0,4.243,0L18.073,19.2Z"/></g></svg>
+                        </button>
+                    </div>
+
+                
+                    <!-- Order older -->
+                    <div>
+                        <button class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" fill="#fff"><g id="_01_align_center" data-name="01 align center"><path d="M16.659,17.788,13.026,21.42,13,0,11,0l.026,21.407-3.62-3.62L5.992,19.2l3.919,3.919a3,3,0,0,0,4.243,0L18.073,19.2Z"/></g></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add Note Button -->
+                <div class="flex my-8 gap-4" id="top">
+                    <RouterLink to="/addtasks" 
+                        class="flex gap-2 text-white text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve" fill="#ddd" width="12px">
+                            <g>
+                                <path d="M480,224H288V32c0-17.673-14.327-32-32-32s-32,14.327-32,32v192H32c-17.673,0-32,14.327-32,32s14.327,32,32,32h192v192   c0,17.673,14.327,32,32,32s32-14.327,32-32V288h192c17.673,0,32-14.327,32-32S497.673,224,480,224z"/>
+                            </g>
+                        </svg>
+                        Agregar Nota
+                    </RouterLink>
+
+                    <!-- Download all button -->
+                    <a 
+                    class="text-white text-xs uppercase p-2 px-4 cursor-pointer border border-gray-600 rounded-md flex gap-2 items-center justify-center hover:border-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="16px" height="16px" fill="#fff"><path d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z"/><path d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z"/></svg>
+                        Descargar todo
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Body: Navegation bar and notes -->
@@ -145,6 +177,13 @@
                             </div>
 
                             <div class="flex gap-2">
+
+                                <!-- Download button -->
+                                <a 
+                                class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="18px" height="18px" fill="#fff"><path d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z"/><path d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z"/></svg>
+                                </a>
+
                                 <!-- Edit button -->
                                 <RouterLink :to="`/edittasks/${note.id}`"
                                 class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
