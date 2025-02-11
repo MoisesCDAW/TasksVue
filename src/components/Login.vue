@@ -32,6 +32,14 @@
         try {
             const data = await axios.get(notesAPI) 
             notes.value = data
+            // console.log(notes.value.data[0].sort((a, b)=>a.id - b.id)); // De menor a mayor
+            // console.log(notes.value.data[0].sort((a, b)=>b.id - a.id)); // De mayor a menor
+
+            // console.log(notes.value.data[0].sort((a, b)=>{
+            //     let aux=a.id - b.id 
+            //     return aux
+            // }));
+            
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   

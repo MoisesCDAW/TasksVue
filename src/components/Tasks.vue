@@ -12,6 +12,26 @@
     const notesAPI = "https://notesapi.moisescap.com/api/notes"
     let lastNoteID = 0 // To keep track of which was the last marked note card.
 
+
+    function sortLatest(){
+        notes.value.data[0].sort((a, b)=>b.id - a.id)
+        
+        // document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
+        //     element.classList.add("border-gray-800")
+        // })
+        document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
+    }
+
+    function sortOlder(){
+        notes.value.data[0].sort((a, b)=>a.id - b.id)
+
+        // document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
+        //     element.classList.add("border-gray-800")
+        // })
+        document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
+    }
+
+
     /**
      * Permite obtener todas las tareas de la API a través de axios y asigna los datos obtenidos 
      * a la variable reactiva "tasks"
@@ -20,6 +40,7 @@
         try {
             const data = await axios.get(notesAPI) 
             notes.value = data
+            
         }catch(error){
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   
@@ -42,9 +63,9 @@
     function printNote(noteID){
 
         // Allows marking the current note's card and unmarking the previous one.
-        document.querySelector(`#note-${noteID}`).classList.toggle("border-gray-800");
+        document.querySelector(`#note-${noteID}`).classList.toggle("border-gray-800")
         if (lastNoteID!=0) {
-            document.querySelector(`#note-${lastNoteID}`).classList.toggle("border-gray-800");
+            document.querySelector(`#note-${lastNoteID}`).classList.toggle("border-gray-800")
         }
         lastNoteID = noteID
 
@@ -102,7 +123,9 @@
 
                     <!-- Order latest -->
                     <div>
-                        <button class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                        <button 
+                        @click="sortLatest"
+                        class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" style="rotate: 180deg;" fill="#fff"><g id="_01_align_center" data-name="01 align center"><path d="M16.659,17.788,13.026,21.42,13,0,11,0l.026,21.407-3.62-3.62L5.992,19.2l3.919,3.919a3,3,0,0,0,4.243,0L18.073,19.2Z"/></g></svg>
                         </button>
                     </div>
@@ -110,7 +133,9 @@
                 
                     <!-- Order older -->
                     <div>
-                        <button class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
+                        <button 
+                        @click="sortOlder"
+                        class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" fill="#fff"><g id="_01_align_center" data-name="01 align center"><path d="M16.659,17.788,13.026,21.42,13,0,11,0l.026,21.407-3.62-3.62L5.992,19.2l3.919,3.919a3,3,0,0,0,4.243,0L18.073,19.2Z"/></g></svg>
                         </button>
                     </div>
@@ -146,7 +171,7 @@
             <div class="flex justify-end w-[20vw] border-e-2 pe-4">
 
                 <!-- Notes of the navegation bar -->
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-4" id="notes">
                     <template v-if="notes"> <!-- if notes is not empty -->
                         <a 
                         href="#top"
