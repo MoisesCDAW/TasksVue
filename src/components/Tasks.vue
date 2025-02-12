@@ -119,13 +119,21 @@
     }
 
 
-    // === INIT ===
-    const aux = localStorage.getItem("tokenSession")
-    if (aux) {
-        userSession.value = localStorage.getItem("userSession")
-        tokenSession.value = {data: {token:aux}}
-        getNotes()
+    /**
+     * It allows you to control if the user is already registered and stores the local storage data in the pinia store
+     */
+    function init() {
+        const aux = localStorage.getItem("tokenSession")
+        if (aux) {
+            userSession.value = localStorage.getItem("userSession")
+            tokenSession.value = {data: {token:aux}}
+            getNotes()
+        }
     }
+
+
+    // === INIT ===
+    init()
 
 </script>
 
