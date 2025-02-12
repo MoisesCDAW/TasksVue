@@ -1,15 +1,12 @@
 <script setup>
-  import { RouterLink, RouterView } from 'vue-router'
-  import { useStore } from './stores/store'
-  import { storeToRefs } from 'pinia'
+  import { RouterView } from 'vue-router'
   import Login from './components/Login.vue'
 
-  const store = useStore()
-  const {userSession} = storeToRefs(store)
+  const tokenSession = localStorage.getItem("tokenSession")
 </script>
 
 <template>
-  <div v-if="userSession">
+  <div v-if="tokenSession">
     <RouterView />
   </div>
   <div v-else>

@@ -1,10 +1,12 @@
 <script setup>
     import { useStore } from '../stores/store'
+    import { useRouter } from 'vue-router'
     import { storeToRefs } from 'pinia' 
     import { RouterLink } from 'vue-router'
     import { ref } from 'vue'
 
     const store = useStore()
+    const route = useRouter()
     const {userSession} = storeToRefs(store)
     const {tokenSession} = storeToRefs(store)
     const {notes} = storeToRefs(store)
@@ -17,18 +19,18 @@
     function sortLatest(){
         notes.value.data[0].sort((a, b)=>b.id - a.id)
         
-        // document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-        //     element.classList.add("border-gray-800")
-        // })
+        document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
+            element.classList.add("border-gray-800")
+        })
         document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
     }
 
     function sortOlder(){
         notes.value.data[0].sort((a, b)=>a.id - b.id)
 
-        // document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-        //     element.classList.add("border-gray-800")
-        // })
+        document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
+            element.classList.add("border-gray-800")
+        })
         document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
     }
 
@@ -106,6 +108,25 @@
         getNotes()
     }
 
+
+    /**
+     * Controls logout and token and user deletion
+     */
+    function logout(){
+        localStorage.setItem("tokenSession", null)
+        userSession.setItem("userSession", null)
+        route.push("/")
+    }
+
+
+    // === INIT ===
+    const aux = localStorage.getItem("tokenSession")
+    if (aux) {
+        userSession.value = localStorage.getItem("userSession")
+        tokenSession.value = {data: {token:aux}}
+        getNotes()
+    }
+
 </script>
 
 <template>
@@ -115,7 +136,7 @@
         <!-- Close sesion button and user name -->
         <header class="flex items-center justify-between p-2 px-16 text-gray-200">
             <p class="p-2 text-center m-2">~ {{userSession}}</p>
-            <RouterLink to="/" class="text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">Cerrar Sesión</RouterLink>      
+            <button @click="logout" class="text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">Cerrar Sesión</button>      
         </header>
 
         <!-- Welcomen Title -->

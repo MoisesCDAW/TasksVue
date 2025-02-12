@@ -20,13 +20,21 @@
         if (email && password) {
 
             userSession.value = email
-            tokenSession.value = await axios.post("https://notesapi.moisescap.com/api/login", {
-                email: email,
-                password: password
-            })
+
+            try {
+                tokenSession.value = await axios.post("https://notesapi.moisescap.com/api/login", {
+                    email: email,
+                    password: password
+                })
+
+                localStorage.setItem("tokenSession", tokenSession.value.data.token)
+                localStorage.setItem("userSession", userSession.value)
             
-            getNotes()
-            route.push("tasks") // Redirección, no confundir con push() de arrays
+                getNotes()
+                route.push("tasks") // Redirección, no confundir con push() de arrays
+            } catch (error) {
+                alert("Las credenciales no coinciden con ningún dato")
+            }
         }else {
             alert("ERROR: No pueden haber datos vacíos")
         }
@@ -36,7 +44,7 @@
     /**
      * * Allows fetching all tasks from the API via axios and assigns the retrieved data to the reactive variable "tasks".
      */
-    async function getNotes(){
+    async function getNotes() {
         try {
             const data = await axios.get(notesAPI, {
                 headers: {
@@ -50,6 +58,7 @@
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   
     }
+
 </script>
 
 <template>
@@ -60,26 +69,28 @@
                 <p class="text-gray-500">Ingresa tu nombre y contraseña para ingresar</p>
             </div>
 
-            <div class="w-full flex flex-col gap-4">
-                <label class="flex flex-col gap-2">
-                    Email
-                    <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
-                    v-model="email" type="text" placeholder="Ingresa tu email">
-                </label>
-                <label class="flex flex-col gap-2">
-                    Contraseña
-                    <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
-                    v-model="password" type="password" placeholder="Ingresa tu contraseña">
-                </label>
-            </div>
+            <form @submit.prevent="onSubmit">   
+                <div class="w-full flex flex-col gap-4">
+                    <label class="flex flex-col gap-2">
+                        Email
+                        <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
+                        v-model="email" type="text" placeholder="Ingresa tu email">
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        Contraseña
+                        <input class="bg-gray-800 h-[40px] rounded-md px-4 border border-gray-600 placeholder:text-gray-500" 
+                        v-model="password" type="password" placeholder="Ingresa tu contraseña">
+                    </label>
+                </div>
 
-            <div class="w-full flex justify-center">
-                <button 
-                    @click="login(email, password)"
-                    class="w-[100px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
-                    >ENVIAR
-                </button>
-            </div>
+                <div class="w-full flex justify-center mt-10">
+                    <button 
+                        @click="login(email, password)"
+                        class="w-[100px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
+                        >ENVIAR
+                    </button>
+                </div>
+            </form>
 
             <div>
                 <p class="text-gray-500 text-xs text-center">MoisesCAP, 2025</p>
