@@ -20,18 +20,24 @@
         notes.value.data[0].sort((a, b)=>b.id - a.id)
         
         document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-            element.classList.add("border-gray-800")
+            if (!element.id.includes(lastNoteID)) {
+                element.classList.add("border-gray-800")  
+            }
         })
         document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
+        printNote(lastNoteID)
     }
 
     function sortOlder(){
         notes.value.data[0].sort((a, b)=>a.id - b.id)
 
         document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-            element.classList.add("border-gray-800")
+            if (!element.id.includes(lastNoteID)) {
+                element.classList.add("border-gray-800")  
+            }
         })
         document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
+        printNote(lastNoteID)
     }
 
 
@@ -114,8 +120,8 @@
      */
     function logout(){
         localStorage.setItem("tokenSession", null)
-        userSession.setItem("userSession", null)
-        route.push("/")
+        localStorage.setItem("userSession", null)
+        route.push("login")
     }
 
 
