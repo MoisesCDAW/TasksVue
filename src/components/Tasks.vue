@@ -16,28 +16,31 @@
     let lastNoteID = 0 // To keep track of which was the last marked note card.
 
 
+    /**
+     * Sort the notes so that the first one is the most recent.
+     */
     function sortLatest(){
         notes.value.data[0].sort((a, b)=>b.id - a.id)
         
         document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-            if (!element.id.includes(lastNoteID)) {
-                element.classList.add("border-gray-800")  
-            }
+            element.classList.add("border-gray-800")
         })
-        document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
-        printNote(lastNoteID)
+        lastNoteID = 0
+        fullNoteModal.value = false
     }
 
+
+    /**
+     * Sort the notes so that the first one is the oldest.
+     */
     function sortOlder(){
         notes.value.data[0].sort((a, b)=>a.id - b.id)
 
         document.querySelector("#notes").querySelectorAll("a").forEach((element)=>{
-            if (!element.id.includes(lastNoteID)) {
-                element.classList.add("border-gray-800")  
-            }
+            element.classList.add("border-gray-800")
         })
-        document.querySelector(`#note-${lastNoteID}`).classList.remove("border-gray-800")
-        printNote(lastNoteID)
+        lastNoteID = 0
+        fullNoteModal.value = false
     }
 
 
@@ -119,9 +122,12 @@
      * Controls logout and token and user deletion
      */
     function logout(){
-        localStorage.setItem("tokenSession", null)
-        localStorage.setItem("userSession", null)
-        route.push("login")
+        localStorage.clear()
+        route.push("/")
+        setTimeout(()=>{
+            location.reload() // reload the page to clear session data from the store.
+        }, 100)
+
     }
 
 
@@ -148,25 +154,25 @@
     <div class="bg-gray-800 min-h-screen">
 
         <!-- Close sesion button and user name -->
-        <header class="flex items-center justify-between p-2 px-16 text-gray-200">
+        <header class="flex items-center justify-between p-2 sm:px-16 text-gray-200">
             <p class="p-2 text-center m-2">~ {{userSession}}</p>
             <button @click="logout" class="text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase">Cerrar Sesión</button>      
         </header>
 
         <!-- Welcomen Title -->
-        <div class="ps-64">
-            <h1 class="font-[IBM Plex] italic text-white text-6xl w-[45vw]">REGISTRA TU DÍA Y NO PIERDAS NINGÚN DETALLE.</h1>
+        <div class="ps-10 sm:ps-24 lg:ps-64">
+            <h1 class="font-[IBM Plex] italic text-white text-4xl sm:text-4xl lg:text-6xl w-[80vw] sm:w-[45vw] mt-5 sm:mt-0">REGISTRA TU DÍA Y NO PIERDAS NINGÚN DETALLE.</h1>
         </div>
 
 
         <!-- Header Action buttons -->
-        <div class="flex justify-center w-screen mt-6">
+        <div class="flex lg:justify-center w-screen mt-6">
             
-            <div class="w-[60vw] flex justify-between ps-48">
+            <div class="w-screen lg:w-[60vw] flex justify-between px-6 lg:ps-48 gap-4 sm:gap-0">
                 <div class="flex gap-2 items-center">
 
                     <!-- Order latest -->
-                    <div>
+                    <div> 
                         <button 
                         @click="sortLatest"
                         class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
@@ -199,30 +205,32 @@
                     </RouterLink>
 
                     <!-- Download all button -->
-                    <a 
+                    <!-- <a 
                     class="text-white text-xs uppercase p-2 px-4 cursor-pointer border border-gray-600 rounded-md flex gap-2 items-center justify-center hover:border-white transition duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="16px" height="16px" fill="#fff"><path d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z"/><path d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z"/></svg>
                         Descargar todo
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
 
         <!-- Body: Navegation bar and notes -->
-        <section class="flex justify-center gap-6 pb-10">
+        <section class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-6 pb-10">
+
+            <span class="block sm:hidden text-sm text-gray-500 ms-10">Desliza para ver las demás notas</span>
 
             <!-- Navigation bar and dates for each note -->
-            <div class="flex justify-end w-[20vw] border-e-2 pe-4">
+            <div class="flex justify-end w-[90vw] sm:w-[20vw] border-b-2 sm:border-e-2 sm:border-b-0 pe-4 mx-5 sm:mx-0">
 
                 <!-- Notes of the navegation bar -->
-                <div class="flex flex-col gap-4" id="notes">
+                <div class="flex overflow-x-scroll sm:flex-col sm:overflow-x-visible gap-4 " id="notes">
                     <template v-if="notes"> <!-- if notes is not empty -->
                         <a 
                         href="#top"
                         v-for="note in notes.data[0]"
                         @click="printNote(note.id, this)"
                         :id="`note-${note.id}`"
-                        class="min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
+                        class="mb-4 lg:mb-0 min-w-[85vw] sm:min-w-[25vw] flex flex-col items-end cursor-pointer transition duration-300 border border-gray-800 hover:border hover:border-white rounded-md p-2 pe-4">
                             <p class="text-gray-500 text-sm">Nota</p>
                             <p class="text-sm text-gray-200 text-right">{{note.title}}</p>
                             <p class="text-gray-500 text-sm">{{formatDate(note.created_at)}}</p>
@@ -232,26 +240,26 @@
             </div>
 
             <!-- Notes -->
-            <div class="w-[45vw]">
+            <div class=" w-[90vw] sm:w-[45vw] mx-5 sm:mx-0">
 
                 <template v-if="fullNoteModal">
                     <!-- First Note -->
                     <div class="text-gray-200 p-6 border border-gray-600 rounded-md">
 
                         <!-- Title and action buttons -->
-                        <div class="flex gap-2 justify-between">
-                            <div class="flex flex-col">
+                        <div class="flex gap-2 justify-between flex-col sm:flex-row">
+                            <div class="flex flex-col order-1 sm:order-0">
                                 <span class="text-sm text-gray-500">Haz click sobre el título para volver a la tarjeta de la nota</span>
                                 <a :href="`#note-${note.id}`" class="text-2xl font-semibold mb-6">{{note.title}}</a>
                             </div>
 
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 order-0 sm:order-1">
 
                                 <!-- Download button -->
-                                <a 
+                                <!-- <a 
                                 class="cursor-pointer border border-gray-600 rounded-md w-[36px] h-[36px] flex items-center justify-center hover:border-white transition duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="18px" height="18px" fill="#fff"><path d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z"/><path d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z"/></svg>
-                                </a>
+                                </a> -->
 
                                 <!-- Edit button -->
                                 <RouterLink :to="`/edittasks/${note.id}`"

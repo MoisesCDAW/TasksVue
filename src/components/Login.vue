@@ -2,6 +2,7 @@
     import { storeToRefs } from 'pinia' 
     import { useStore } from '../stores/store'
     import { useRouter } from 'vue-router'
+    import { RouterLink } from 'vue-router'
     import { ref } from 'vue'
 
     const store = useStore()
@@ -63,7 +64,7 @@
 
 <template>
     <div class="w-screen h-screen flex justify-center items-center bg-gray-800 text-white text-sm">
-        <div class="flex flex-col w-[25vw] h-[80vh] p-4 gap-5 border border-gray-600 rounded-md">
+        <div class="flex flex-col lg:w-[25vw] sm:h-[90vh] lg:h-[80vh] p-4 gap-5 border border-gray-600 rounded-md">
             <div>
                 <h1 class="text-3xl font-[IBM Plex] italic mb-1">Iniciar Sesión</h1>
                 <p class="text-gray-500">Ingresa tu nombre y contraseña para ingresar</p>
@@ -93,7 +94,15 @@
             </form>
 
             <div>
-                <p class="text-gray-500 text-xs text-center">MoisesCAP, 2025</p>
+                <p class="text-gray-500 text-xs text-center hidden lg:block">MoisesCAP, 2025</p>
+            </div>
+
+            <div>
+                <RouterLink to="/" 
+                class="absolute left-6 top-6 w-[50px] flex justify-center gap-2 text-xs p-2 px-4 rounded cursor-pointer border border-gray-600 transition duration-300 hover:shadow-xl hover:border-white uppercase"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" style="rotate: 90deg;" fill="#fff"><g id="_01_align_center" data-name="01 align center"><path d="M16.659,17.788,13.026,21.42,13,0,11,0l.026,21.407-3.62-3.62L5.992,19.2l3.919,3.919a3,3,0,0,0,4.243,0L18.073,19.2Z"/></g></svg>
+                </RouterLink>
             </div>
         </div>
 
