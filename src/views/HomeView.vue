@@ -103,7 +103,7 @@
 
         <!-- Welcomen Title -->
         <div class="ps-10 sm:ps-24 lg:ps-64">
-            <h1 class="font-[IBM Plex] italic text-white text-4xl sm:text-4xl lg:text-6xl w-[80vw] sm:w-[45vw] mt-5 sm:mt-0">REGISTRA TU DÍA Y NO PIERDAS NINGÚN DETALLE.</h1>
+            <h1 class="font-[IBM Plex] italic text-white text-4xl sm:text-4xl lg:text-6xl w-[80vw] sm:w-[45vw] mt-5 sm:mt-0">DESCUBRE TODO SOBRE LAS PRÁCTICAS ERASMUS EN FRANCIA.</h1>
         </div>
 
 
