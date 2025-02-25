@@ -29,8 +29,6 @@
             console.log(`ERROR. No se pudo obtener la información: ${error}`)
         }   
     }
-
-
     /**
      * Makes the request to create a note with the data collected from the inputs, 
      * updates the "Notes" store, and redirects to the main section.
@@ -38,6 +36,7 @@
      * @param newNote 
      */
     async function createNote(newTitle, newNote) {
+
         if (newTitle && newNote){
 
             await axios.post(notesAPI,                
@@ -81,7 +80,7 @@
 
                     <label class="flex flex-col gap-2">
                         Nota
-                        <textarea required class="bg-gray-800 h-[45vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
+                        <textarea required class="bg-gray-800 h-[40vh] rounded-md p-2 border border-gray-600 placeholder:text-gray-500 scrollbar-minimalista" v-model="note" placeholder="Registra tu día y no pierdas ningún detalle"></textarea>
                     </label>
                 </div>
                 
